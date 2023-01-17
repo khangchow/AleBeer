@@ -7,7 +7,7 @@ import com.chow.alebeer.model.BeerEntity
 @Dao
 interface BeerDao {
     @Query("SELECT * FROM beer WHERE id = :id")
-    suspend fun findBeerByName(id: Int): BeerEntity?
+    suspend fun findBeerById(id: Int): BeerEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(beerEntity: BeerEntity): Long
