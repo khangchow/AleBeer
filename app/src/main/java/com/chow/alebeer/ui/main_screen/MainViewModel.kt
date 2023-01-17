@@ -11,6 +11,7 @@ import com.chow.alebeer.other.Event
 import com.chow.alebeer.other.FileUtils
 import com.chow.alebeer.other.Resource
 import kotlinx.coroutines.launch
+import java.io.File
 
 class MainViewModel(private val mainRepository: MainRepository): ViewModel() {
     private val _getBeersStatus = MutableLiveData<Resource<List<BeerModel>>>()
@@ -60,7 +61,10 @@ class MainViewModel(private val mainRepository: MainRepository): ViewModel() {
 
     fun deleteBeer(beerEntity: BeerEntity) {
         viewModelScope.launch {
-            if ((mainRepository.deleteBeer(beerEntity)) == 1) isBeerDeletedLately = true
+            if ((mainRepository.deleteBeer(beerEntity)) == 1) {
+                File(beerEntity.localImagePath).delete()
+                isBeerDeletedLately = true
+            }
         }
     }
 
@@ -95,14 +99,12 @@ class MainViewModel(private val mainRepository: MainRepository): ViewModel() {
     }
 
     private fun replaceBeerWithLocalDataIfExistedAfterDeletingOrLoadingNewDataFromServer() {
-        Log.d("CHOTAOTEST", "delete or load: ")
         viewModelScope.launch {
             mainRepository.getBeers().run {
                 if (isSuccessful) {
                     body()?.let {
                         if (it.status == Constants.RESPONSE_STATUS_OK) {
                             it.data.toBeerList().map { beer ->
-                                Log.d("CHOTAOTEST", "deleted: ${beer.name} ${mainRepository.getBeerById(beer.id)}")
                                 mainRepository.getBeerById(beer.id)?.toBeerModel()
                                     ?.copy(image = beer.image)
                                     ?: beer
