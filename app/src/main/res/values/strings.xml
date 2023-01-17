@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AleBeer</string>
+    <string name="tab_beer">Beer</string>
+    <string name="tab_favorite">Favorite</string>
+    <string name="beer_image">beer image</string>
+    <string name="save_button">Save</string>
+    <string name="saving_button">Saving</string>
+    <string name="delete_button">Delete</string>
+    <string name="update_button">Update</string>
+    <string name="note_hint">Note</string>
+</resources>
